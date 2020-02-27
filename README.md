@@ -5,9 +5,9 @@ A example deployment for Github Actions with Serverless Framework.
 # Installation
 
 * Fork this repo
-* Populate `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in GitHub secrets in your forked repo
+* Populate `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in GitHub secrets in your forked repo like so:
 
-![Screenshot](screenshots/AWS_Secrets.png)
+    ![Screenshot](screenshots/AWS_Secrets.png)
 
 # Usage
 
@@ -57,6 +57,10 @@ Once a feature branch is merged into develop (or master), you can delete the bra
 All corresponding resources in that branch's environment will be permanently deleted.∂
 
 ![Screenshot](screenshots/serverless_remove.png)
+
+# Notes
+
+More details in my blog post [here]()
 
 
 
