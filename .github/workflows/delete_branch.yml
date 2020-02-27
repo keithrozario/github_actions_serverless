@@ -4,6 +4,7 @@ on:
   delete:
     branches:
       - actions-**
+      - develop
 
 # Specify what jobs to run
 jobs:
