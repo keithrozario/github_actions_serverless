@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1 
 
-      - name: Github context
-        run: echo "${{ toJson(github) }}"
+      # - name: Github context
+      #   run: echo "${{ toJson(github) }}"
       
       - name: Set Branch name
         run: |
@@ -29,17 +29,17 @@ jobs:
       - name: Echo Branch name
         run: echo Deleting from STAGE:$STAGE
 
-      - name: Cache node modules
-        uses: actions/cache@v1
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+      # - name: Cache node modules
+      #   uses: actions/cache@v1
+      #   env:
+      #     cache-name: cache-node-modules
+      #   with:
+      #     path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+      #     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-${{ env.cache-name }}-
+      #       ${{ runner.os }}-build-
+      #       ${{ runner.os }}-
       
       # Install npm and it's dependencies
       - name: npm install dependencies
@@ -47,6 +47,6 @@ jobs:
 
       # sls remove
       - name: Serverless
-        uses: serverless/github-action@v1.53.0
+        uses: serverless/github-action@e17abe72d4969e86cb53576ade34e95c40362f0e
         with:
           args: remove
