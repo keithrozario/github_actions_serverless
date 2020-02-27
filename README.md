@@ -7,6 +7,8 @@ A example deployment for Github Actions with Serverless Framework.
 * Fork this repo
 * Populate `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in GitHub secrets in your forked repo
 
+![Screenshot](screenshots/AWS_Secrets.png)
+
 # Usage
 
 ## Deploy Develop Branch
