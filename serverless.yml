@@ -1,0 +1,54 @@
+service: at  # actions test
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${env:STAGE, "actions-xx"}
+  region: ${file(config/config.json):aws_region.${self:provider.stage}, 'ap-southeast-1'}
+  memorySize: 256
+  timeout: 5
+
+functions:
+  hello:
+    handler: main.hello
+    iamRoleStatementsName: hello-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - lambda:InvokeFunction
+        Resource: "*"
+  goodbye:
+    handler: main.goodbye
+    iamRoleStatementsName: goodbye-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - lambda:InvokeFunction
+        Resource: "*"
+
+
+# Step Functions
+plugins:
+  - serverless-step-functions
+  - serverless-iam-roles-per-function
+
+stepFunctions:
+  stateMachines:
+    helloandgoodbye:
+      name: hello_and_goodbye-${self:provider.stage}
+      definition:
+        Comment: "Saying Hello and Goodbye Via Step Functions"
+        StartAt: hello
+        States:
+          hello:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [HelloLambdaFunction, Arn]
+            Next: goodbye
+          goodbye:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [GoodbyeLambdaFunction, Arn]
+            Next: done
+          done:
+            Type: Succeed

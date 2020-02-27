@@ -1,0 +1,27 @@
+name: Pull Request on Develop
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+# Specify what jobs to run
+jobs:
+  sls_deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    # env:
+    #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+      - uses: actions/checkout@v1 
+
+      - name: Set Branch name to $STAGE env var
+        run: |
+          BRANCH="$(echo ${GITHUB_HEAD_REF#refs/heads/} | sed 's/\//_/g')"
+          echo "Source branch for this pull request is $BRANCH"
+          echo "::set-env name=STAGE::$BRANCH"
+      
+      - name: echo stage name
+        run: echo "$STAGE"

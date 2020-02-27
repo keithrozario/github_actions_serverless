@@ -1,0 +1,52 @@
+name: Serverless Delete example
+
+on:
+  delete:
+    branches:
+      - actions-**
+
+# Specify what jobs to run
+jobs:
+  deploy:
+    name: delete
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+      - uses: actions/checkout@v1 
+
+      - name: Github context
+        run: echo "${{ toJson(github) }}"
+      
+      - name: Set Branch name
+        run: |
+          BRANCH=$(cat ${{ github.event_path }} | jq --raw-output '.ref')
+          echo "${{ github.repository }} has ${BRANCH} branch"
+          echo "::set-env name=STAGE::$(echo ${BRANCH})"
+
+      - name: Echo Branch name
+        run: echo Deleting from STAGE:$STAGE
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      
+      # Install npm and it's dependencies
+      - name: npm install dependencies
+        run: npm install
+
+      # sls remove
+      - name: Serverless
+        uses: serverless/github-action@v1.53.0
+        with:
+          args: remove

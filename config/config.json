@@ -1,0 +1,7 @@
+{
+    "aws_region": {
+        "actions-dev" : "ap-southeast-1",
+        "actions-qa" : "us-east-2",
+        "actions-prod": "us-east-1"
+    }
+}
